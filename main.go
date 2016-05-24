@@ -7,6 +7,7 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -20,6 +21,7 @@ var (
 type Reading struct {
 	Value string `json:"value"`
 	Time  int64  `json:"time"`
+	Host  string `json:"host"`
 }
 
 func main() {
@@ -36,9 +38,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	str := strings.Trim(string(buf[:n]), "\r")
-	r := Reading{Value: str, Time: time.Now().Unix()}
+
+	h, err := os.Hostname()
+	if err != nil {
+		log.Fatal(err)
+	}
+	r := Reading{Value: str, Time: time.Now().Unix(), Host: h}
 
 	b, err := json.Marshal(r)
 
