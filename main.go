@@ -83,7 +83,8 @@ func writeJSONToFile(json []byte) error {
 }
 
 func readSerialValue() (value string) {
-	c := &serial.Config{Name: "/dev/ttyAMA0", Baud: 9600}
+	log.Print("Attempting to read from serial device...")
+	c := &serial.Config{Name: "/dev/ttyAMA0", Baud: 9600, ReadTimeout: time.Second * 10}
 	s, err := serial.OpenPort(c)
 	check(err)
 
